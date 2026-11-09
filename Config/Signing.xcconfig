@@ -1,0 +1,6 @@
+// Code signing team for all targets (set as the project's base configuration).
+// Put your own team in Config/Signing.local.xcconfig (gitignored):
+//   DEVELOPMENT_TEAM = YOURTEAMID
+DEVELOPMENT_TEAM =
+
+#include? "Signing.local.xcconfig"

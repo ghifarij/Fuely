@@ -1,0 +1,707 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 110;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FE041F1D30A02DD200C7954F /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE041F1C30A02DD200C7954F /* WidgetKit.framework */; };
+		FE041F1F30A02DD200C7954F /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FE041F1E30A02DD200C7954F /* SwiftUI.framework */; };
+		FE041F2C30A02DD200C7954F /* FuelyWidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE041F1A30A02DD200C7954F /* FuelyWidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		FE0420113100000000C7954F /* FuelyCore in Frameworks */ = {isa = PBXBuildFile; productRef = FE0420103100000000C7954F /* FuelyCore */; };
+		FE0420133100000000C7954F /* FuelyCore in Frameworks */ = {isa = PBXBuildFile; productRef = FE0420123100000000C7954F /* FuelyCore */; };
+		FE0420153100000000C7954F /* FuelyCore in Frameworks */ = {isa = PBXBuildFile; productRef = FE0420143100000000C7954F /* FuelyCore */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FE041F2A30A02DD200C7954F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FE041F0030A02D8F00C7954F /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FE041F1930A02DD100C7954F;
+			remoteInfo = FuelyWidgetsExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FE041F3130A02DD200C7954F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			dstPath = "";
+			dstSubfolder = PlugIns;
+			files = (
+				FE041F2C30A02DD200C7954F /* FuelyWidgetsExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FE041F0830A02D8F00C7954F /* Fuely.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Fuely.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE041F1A30A02DD200C7954F /* FuelyWidgetsExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = FuelyWidgetsExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE041F1C30A02DD200C7954F /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = /System/Library/Frameworks/WidgetKit.framework; sourceTree = "<absolute>"; };
+		FE041F1E30A02DD200C7954F /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = /System/Library/Frameworks/SwiftUI.framework; sourceTree = "<absolute>"; };
+		FE041F3630A02DD800C7954F /* FuelyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FuelyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE041F5030A02E6F00C7954F /* FuelyWidgetsExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = FuelyWidgetsExtension.entitlements; sourceTree = "<group>"; };
+		FE0420023100000000C7954F /* FuelyCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FuelyCore; sourceTree = "<group>"; };
+		FE0420A03100000000C7954F /* Signing.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Signing.xcconfig; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FE041F2D30A02DD200C7954F /* Exceptions for "FuelyWidgets" folder in "FuelyWidgetsExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FE041F1930A02DD100C7954F /* FuelyWidgetsExtension */;
+		};
+		FE041F8D30A03C7600C7954F /* Exceptions for "Fuely" folder in "Fuely" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FE041F0730A02D8F00C7954F /* Fuely */;
+		};
+		FE0420F13100000000C7954F /* Exceptions for "FuelyWidgets" folder in "Fuely" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Shared/LogWaterIntent.swift,
+				Shared/WaterDraftIntents.swift,
+			);
+			target = FE041F0730A02D8F00C7954F /* Fuely */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		FE041F0A30A02D8F00C7954F /* Fuely */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FE041F8D30A03C7600C7954F /* Exceptions for "Fuely" folder in "Fuely" target */,
+			);
+			path = Fuely;
+			sourceTree = "<group>";
+		};
+		FE041F2030A02DD200C7954F /* FuelyWidgets */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FE0420F13100000000C7954F /* Exceptions for "FuelyWidgets" folder in "Fuely" target */,
+				FE041F2D30A02DD200C7954F /* Exceptions for "FuelyWidgets" folder in "FuelyWidgetsExtension" target */,
+			);
+			path = FuelyWidgets;
+			sourceTree = "<group>";
+		};
+		FE041F3730A02DD800C7954F /* FuelyTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FuelyTests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FE041F0530A02D8F00C7954F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				FE0420113100000000C7954F /* FuelyCore in Frameworks */,
+			);
+		};
+		FE041F1730A02DD100C7954F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				FE0420133100000000C7954F /* FuelyCore in Frameworks */,
+				FE041F1F30A02DD200C7954F /* SwiftUI.framework in Frameworks */,
+				FE041F1D30A02DD200C7954F /* WidgetKit.framework in Frameworks */,
+			);
+		};
+		FE041F3330A02DD800C7954F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			files = (
+				FE0420153100000000C7954F /* FuelyCore in Frameworks */,
+			);
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FE041EFF30A02D8F00C7954F = {
+			isa = PBXGroup;
+			children = (
+				FE0420A13100000000C7954F /* Config */,
+				FE041F5030A02E6F00C7954F /* FuelyWidgetsExtension.entitlements */,
+				FE0420023100000000C7954F /* FuelyCore */,
+				FE041F0A30A02D8F00C7954F /* Fuely */,
+				FE041F2030A02DD200C7954F /* FuelyWidgets */,
+				FE041F3730A02DD800C7954F /* FuelyTests */,
+				FE041F1B30A02DD200C7954F /* Frameworks */,
+				FE041F0930A02D8F00C7954F /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FE0420A13100000000C7954F /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				FE0420A03100000000C7954F /* Signing.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
+		FE041F0930A02D8F00C7954F /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FE041F0830A02D8F00C7954F /* Fuely.app */,
+				FE041F1A30A02DD200C7954F /* FuelyWidgetsExtension.appex */,
+				FE041F3630A02DD800C7954F /* FuelyTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FE041F1B30A02DD200C7954F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				FE041F1C30A02DD200C7954F /* WidgetKit.framework */,
+				FE041F1E30A02DD200C7954F /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FE041F0730A02D8F00C7954F /* Fuely */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE041F1330A02D9000C7954F /* Build configuration list for PBXNativeTarget "Fuely" */;
+			buildPhases = (
+				FE041F0430A02D8F00C7954F /* Sources */,
+				FE041F0530A02D8F00C7954F /* Frameworks */,
+				FE041F0630A02D8F00C7954F /* Resources */,
+				FE041F3130A02DD200C7954F /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FE041F2B30A02DD200C7954F /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				FE041F0A30A02D8F00C7954F /* Fuely */,
+			);
+			name = Fuely;
+			packageProductDependencies = (
+				FE0420103100000000C7954F /* FuelyCore */,
+			);
+			productName = Fuely;
+			productReference = FE041F0830A02D8F00C7954F /* Fuely.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FE041F1930A02DD100C7954F /* FuelyWidgetsExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE041F2E30A02DD200C7954F /* Build configuration list for PBXNativeTarget "FuelyWidgetsExtension" */;
+			buildPhases = (
+				FE041F1630A02DD100C7954F /* Sources */,
+				FE041F1730A02DD100C7954F /* Frameworks */,
+				FE041F1830A02DD100C7954F /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				FE041F2030A02DD200C7954F /* FuelyWidgets */,
+			);
+			name = FuelyWidgetsExtension;
+			packageProductDependencies = (
+				FE0420123100000000C7954F /* FuelyCore */,
+			);
+			productName = FuelyWidgetsExtension;
+			productReference = FE041F1A30A02DD200C7954F /* FuelyWidgetsExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		FE041F3530A02DD800C7954F /* FuelyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FE041F3A30A02DD800C7954F /* Build configuration list for PBXNativeTarget "FuelyTests" */;
+			buildPhases = (
+				FE041F3230A02DD800C7954F /* Sources */,
+				FE041F3330A02DD800C7954F /* Frameworks */,
+				FE041F3430A02DD800C7954F /* Resources */,
+			);
+			buildRules = (
+			);
+			fileSystemSynchronizedGroups = (
+				FE041F3730A02DD800C7954F /* FuelyTests */,
+			);
+			name = FuelyTests;
+			packageProductDependencies = (
+				FE0420143100000000C7954F /* FuelyCore */,
+			);
+			productName = FuelyTests;
+			productReference = FE041F3630A02DD800C7954F /* FuelyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FE041F0030A02D8F00C7954F /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2710;
+				LastUpgradeCheck = 2710;
+				TargetAttributes = {
+					FE041F0730A02D8F00C7954F = {
+						CreatedOnToolsVersion = 27.1;
+					};
+					FE041F1930A02DD100C7954F = {
+						CreatedOnToolsVersion = 27.1;
+					};
+					FE041F3530A02DD800C7954F = {
+						CreatedOnToolsVersion = 27.1;
+					};
+				};
+			};
+			buildConfigurationList = FE041F0330A02D8F00C7954F /* Build configuration list for PBXProject "Fuely" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FE041EFF30A02D8F00C7954F;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FE0420013100000000C7954F /* XCLocalSwiftPackageReference "FuelyCore" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = FE041F0930A02D8F00C7954F /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FE041F0730A02D8F00C7954F /* Fuely */,
+				FE041F1930A02DD100C7954F /* FuelyWidgetsExtension */,
+				FE041F3530A02DD800C7954F /* FuelyTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FE041F0630A02D8F00C7954F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		FE041F1830A02DD100C7954F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+		FE041F3430A02DD800C7954F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FE041F0430A02D8F00C7954F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		FE041F1630A02DD100C7954F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+		FE041F3230A02DD800C7954F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			files = (
+			);
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FE041F2B30A02DD200C7954F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FE041F1930A02DD100C7954F /* FuelyWidgetsExtension */;
+			targetProxy = FE041F2A30A02DD200C7954F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		FE041F1130A02D9000C7954F /* Debug configuration for PBXProject "Fuely" */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE0420A03100000000C7954F /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		FE041F1230A02D9000C7954F /* Release configuration for PBXProject "Fuely" */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = FE0420A03100000000C7954F /* Signing.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FE041F1430A02D9000C7954F /* Debug configuration for PBXNativeTarget "Fuely" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Fuely/Fuely.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Fuely/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Fuely reads your water intake, sleep and workouts to track your daily goals.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Fuely saves the water you log to Apple Health.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afgaghifari.fuely;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FE041F1530A02D9000C7954F /* Release configuration for PBXNativeTarget "Fuely" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Fuely/Fuely.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Fuely/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Fuely reads your water intake, sleep and workouts to track your daily goals.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Fuely saves the water you log to Apple Health.";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afgaghifari.fuely;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FE041F2F30A02DD200C7954F /* Debug configuration for PBXNativeTarget "FuelyWidgetsExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FuelyWidgets/FuelyWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FuelyWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Fuely;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afgaghifari.fuely.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FE041F3030A02DD200C7954F /* Release configuration for PBXNativeTarget "FuelyWidgetsExtension" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ENTITLEMENTS = FuelyWidgets/FuelyWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = FuelyWidgets/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Fuely;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afgaghifari.fuely.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		FE041F3B30A02DD800C7954F /* Debug configuration for PBXNativeTarget "FuelyTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afgaghifari.fuely.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		FE041F3C30A02DD800C7954F /* Release configuration for PBXNativeTarget "FuelyTests" */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.afgaghifari.fuely.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FE041F0330A02D8F00C7954F /* Build configuration list for PBXProject "Fuely" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE041F1130A02D9000C7954F /* Debug configuration for PBXProject "Fuely" */,
+				FE041F1230A02D9000C7954F /* Release configuration for PBXProject "Fuely" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FE041F1330A02D9000C7954F /* Build configuration list for PBXNativeTarget "Fuely" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE041F1430A02D9000C7954F /* Debug configuration for PBXNativeTarget "Fuely" */,
+				FE041F1530A02D9000C7954F /* Release configuration for PBXNativeTarget "Fuely" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FE041F2E30A02DD200C7954F /* Build configuration list for PBXNativeTarget "FuelyWidgetsExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE041F2F30A02DD200C7954F /* Debug configuration for PBXNativeTarget "FuelyWidgetsExtension" */,
+				FE041F3030A02DD200C7954F /* Release configuration for PBXNativeTarget "FuelyWidgetsExtension" */,
+			);
+			defaultConfigurationName = Release;
+		};
+		FE041F3A30A02DD800C7954F /* Build configuration list for PBXNativeTarget "FuelyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FE041F3B30A02DD800C7954F /* Debug configuration for PBXNativeTarget "FuelyTests" */,
+				FE041F3C30A02DD800C7954F /* Release configuration for PBXNativeTarget "FuelyTests" */,
+			);
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FE0420013100000000C7954F /* XCLocalSwiftPackageReference "FuelyCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = FuelyCore;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FE0420103100000000C7954F /* FuelyCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0420013100000000C7954F /* XCLocalSwiftPackageReference "FuelyCore" */;
+			productName = FuelyCore;
+		};
+		FE0420123100000000C7954F /* FuelyCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0420013100000000C7954F /* XCLocalSwiftPackageReference "FuelyCore" */;
+			productName = FuelyCore;
+		};
+		FE0420143100000000C7954F /* FuelyCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FE0420013100000000C7954F /* XCLocalSwiftPackageReference "FuelyCore" */;
+			productName = FuelyCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = FE041F0030A02D8F00C7954F /* Project object */;
+	validationLevel = 1;
+}
