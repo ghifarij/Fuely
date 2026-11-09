@@ -26,4 +26,11 @@ Personal iOS health app: water intake + sleep score + weekly workout goal, with 
 - Verify UI with screenshots (light, dark, lock screen tinted) and judge them against the Apple HIG and the Fuely brand (DECISIONS §9).
 
 ## Git
-- Not a git repo yet. Initialize before the first code commit if the user agrees.
+- Remote: `origin` = https://github.com/ghifarij/Fuely.git (**public**). Single developer, so work directly on `main`; no PRs needed. Use a short-lived branch only for risky experiments, then merge locally.
+- Claude handles git: `status`, `diff`, `add`, `commit` (writes the message), `branch`, `switch`, `merge`, `fetch`, `pull`, `stash`.
+- **Never `git push`**, in any form (incl. `--force`, tags, `gh` pushes). The user pushes manually. Also blocked in `.claude/settings.json`.
+- No history rewrites (`reset --hard`, `rebase`, `commit --amend` on pushed commits, `filter-repo`) without the user's explicit OK.
+- Commit at the end of each finished task/phase (one commit per phase unless told otherwise). Message: imperative summary line, short body on what and why.
+- No attribution: no `Co-Authored-By`, no "Generated with Claude Code", no session links.
+- Author is `ghifarij <54807546+ghifarij@users.noreply.github.com>` (repo-local config). Never use a personal email.
+- **Before every commit**, check the staged diff for personal data (health values, screenshots, weight, schedule, location/time zone, device name/UDID, team ID, email). The repo is public; see `.gitignore` for private paths (`SleepScore/`, `Config/Signing.local.xcconfig`).
