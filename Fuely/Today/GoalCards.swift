@@ -1,59 +1,36 @@
 import FuelyCore
 import SwiftUI
 
-/// Water: total incl. other apps vs goal, %, pace state, and the Log Water button (W3, W4, W8).
+/// Water (DECISIONS T4, W3, W4): the animated drop with today's %, the total (every source) vs the
+/// goal, and the Log Water button. The pace badge lives in the quick-log sheet.
 struct WaterCard: View {
     var summary: TodaySummary
+    /// `AppModel.openingRiseRequestedAt` (T4a).
+    var riseRequestedAt: Date? = nil
+    /// `AppModel.fuelyLogCount` (T4e).
+    var fuelyLogCount = 0
+    var onRiseConsumed: () -> Void = {}
+    /// `AppModel.claimGoalCelebration` (T4c).
+    var claimCelebration: () -> Bool = { false }
     var onLog: () -> Void
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    @ScaledMetric(relativeTo: .largeTitle) private var ringSize: CGFloat = 112
+    /// Grows with Dynamic Type, capped so the drop never crowds the text at accessibility sizes (T4d).
+    @ScaledMetric(relativeTo: .largeTitle) private var scaledDropHeight: CGFloat = 176
 
     private var water: WaterProgress { summary.water }
+    private var dropHeight: CGFloat { min(scaledDropHeight, 220) }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: FuelySpacing.m) {
-            let layout = dynamicTypeSize.isAccessibilitySize
-                ? AnyLayout(VStackLayout(alignment: .leading, spacing: FuelySpacing.m))
-                : AnyLayout(HStackLayout(spacing: FuelySpacing.l))
-            layout {
-                ZStack {
-                    ProgressRing(fraction: water.fraction, color: FuelyColor.water, lineWidth: 14)
-                    Text(FuelyFormat.percent(water.fraction))
-                        .font(FuelyFont.value)
-                        .monospacedDigit()
-                        .foregroundStyle(FuelyColor.ocean)
-                        .minimumScaleFactor(0.6)
-                        .lineLimit(1)
-                        .padding(FuelySpacing.m)
-                }
-                .frame(width: ringSize, height: ringSize)
-
-                VStack(alignment: .leading, spacing: FuelySpacing.xxs) {
-                    CardTitle("Water", systemImage: "drop.fill", color: FuelyColor.water)
-                    Text(FuelyFormat.water(water.totalML))
-                        .font(FuelyFont.hero)
-                        .monospacedDigit()
-                        .foregroundStyle(FuelyColor.ocean)
-                        .contentTransition(.numericText(value: Double(water.totalML)))
-                    Text("of \(FuelyFormat.water(water.goalML))")
-                        .font(FuelyFont.detail)
-                        .foregroundStyle(.secondary)
-                    PaceBadge(water: water)
-                        .padding(.top, FuelySpacing.xxs)
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
+        VStack(spacing: FuelySpacing.m) {
+            VStack(spacing: FuelySpacing.s) {
+                WaterDropView(fraction: water.fraction, height: dropHeight, riseRequestedAt: riseRequestedAt,
+                              fuelyLogCount: fuelyLogCount, onRiseConsumed: onRiseConsumed, claimCelebration: claimCelebration)
+                    .padding(.top, FuelySpacing.xs)
+                totalLine
             }
+            .frame(maxWidth: .infinity)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(TodayCopy.waterAccessibility(water))
-
-            if let note = TodayCopy.otherAppsNote(summary) {
-                HStack(spacing: FuelySpacing.xs) {
-                    Image(systemName: "square.stack.3d.up").accessibilityHidden(true)
-                    Text(note)
-                }
-                .font(FuelyFont.caption)
-                .foregroundStyle(.secondary)
-            }
 
             Button(action: onLog) {
                 Label("Log water", systemImage: "plus")
@@ -67,6 +44,27 @@ struct WaterCard: View {
             .accessibilityHint("Opens quick amounts and undo")
         }
         .fuelyCard(tint: FuelyColor.water)
+    }
+
+    /// "1.5 L of 2.4 L" on one line; stacked at accessibility sizes so nothing truncates.
+    private var totalLine: some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(spacing: 0))
+            : AnyLayout(HStackLayout(alignment: .firstTextBaseline, spacing: FuelySpacing.xs))
+        return layout {
+            Text(FuelyFormat.water(water.totalML))
+                .font(FuelyFont.hero)
+                .monospacedDigit()
+                .foregroundStyle(FuelyColor.ocean)
+                .contentTransition(.numericText(value: Double(water.totalML)))
+            Text("of \(FuelyFormat.water(water.goalML))")
+                .font(.system(.title3, design: .rounded, weight: .semibold))
+                .foregroundStyle(.secondary)
+        }
+        // Animates the layout too, so "of 2.4 L" slides with the rolling total instead of jumping.
+        .animation(.snappy, value: water.totalML)
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
     }
 }
 

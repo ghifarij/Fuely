@@ -92,18 +92,11 @@ import Testing
         #expect(TodayCopy.catchUpML(summary(waterML: 1300, sleep: nil).water) == 0)
     }
 
-    @Test func otherAppsNote() {
-        var log = WaterLog()
-        log.log(WaterEntry(date: now, amountML: 200), enqueuedAt: now)
-        let snapshot = HealthSnapshot(refreshedAt: now, externalWaterML: 300, sleepScore: nil, workouts: [])
-        let s = TodaySummary.make(settings: .default, waterLog: log, snapshot: snapshot, now: now, calendar: cal)
-        #expect(TodayCopy.otherAppsNote(s) == "Includes 300 ml from other apps")
-        #expect(TodayCopy.otherAppsNote(summary(waterML: 200, sleep: nil)) == nil)
-    }
-
     @Test func waterAccessibility() {
         #expect(TodayCopy.waterAccessibility(summary(waterML: 1200, sleep: nil).water)
-                == "Water, 1.2 liters of 2.4 liters, 50 percent, on track")
+                == "Water, 1.2 liters of 2.4 liters, 50 percent")
+        #expect(TodayCopy.waterAccessibility(summary(waterML: 3000, sleep: nil).water)
+                == "Water, 3 liters of 2.4 liters, 125 percent")
     }
 
     @Test func sleepDetailAndNoDataHint() {

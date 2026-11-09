@@ -45,12 +45,28 @@ final class AppModel {
     private(set) var notificationPermission: NotificationPermission = .allowed
     @ObservationIgnored private var rescheduleTask: Task<Void, Never>?
 
+    /// Wall-clock time of the latest request for the Today drop's opening rise (DECISIONS T4a);
+    /// nil once the drop played it. Only `WaterDropMotion` decides when to request it.
+    /// Only set when Today's drop can pick it up within `WaterDropMotion.pendingRiseLifetime` (T4g).
+    private(set) var openingRiseRequestedAt: Date?
+    /// Bumped on every drink logged in Fuely (quick-log sheet). The drop splashes and plays the light
+    /// haptic only for these, not for other apps' water arriving with a Health refresh (T4e).
+    private(set) var fuelyLogCount = 0
+    @ObservationIgnored private var hasBecomeActive = false
+    @ObservationIgnored private var backgroundedAt: Date?
+    /// Where the last celebrated day (T4c) is remembered; nil keeps it in memory only (previews).
+    @ObservationIgnored private let celebrationDefaults: UserDefaults?
+    @ObservationIgnored private var lastCelebratedDay: Date?
+    private static let lastCelebratedDayKey = "waterGoalLastCelebratedDay"
+
     private static let log = Logger(subsystem: "com.afgaghifari.fuely", category: "AppModel")
 
     init(store: FuelyStore, healthKit: (any HealthKitClient)?, calendar: Calendar = .current,
          now: @escaping () -> Date = Date.init, reloadsWidgets: Bool = true, asksSystemPermissions: Bool = true,
-         notifications: (any NotificationScheduling)? = nil) {
+         notifications: (any NotificationScheduling)? = nil, celebrationDefaults: UserDefaults? = nil) {
         self.store = store
+        self.celebrationDefaults = celebrationDefaults
+        self.lastCelebratedDay = celebrationDefaults?.object(forKey: Self.lastCelebratedDayKey) as? Date
         self.healthKit = healthKit
         self.calendar = calendar
         self.now = now
@@ -76,7 +92,8 @@ final class AppModel {
         }
         let healthKit: (any HealthKitClient)? = WaterLogService.canUseHealthKit ? LiveHealthKitClient() : nil
         migrateOnboardingFlag(into: store)
-        return AppModel(store: store, healthKit: healthKit, notifications: LiveNotificationCenter())
+        return AppModel(store: store, healthKit: healthKit, notifications: LiveNotificationCenter(),
+                        celebrationDefaults: .standard)
     }
 
     /// Phase 2A kept the onboarding flag in `UserDefaults`; it now lives in `FuelySettings`.
@@ -117,6 +134,38 @@ final class AppModel {
 
     /// The sync problem to show (a failed push wins over a failed read).
     var syncHint: TodayCopy.SyncHint? { TodayCopy.syncHint(summary.syncIssue ?? refreshIssue) }
+
+    // MARK: Water drop moments (DECISIONS T4a, T4c)
+
+    /// Call when the scene becomes active: requests the opening rise on a cold launch or after
+    /// ≥ 30 min in the background.
+    func sceneDidBecomeActive() {
+        let play = WaterDropMotion.shouldPlayOpeningRise(isColdLaunch: !hasBecomeActive,
+                                                         backgroundedAt: backgroundedAt, now: Date())
+        hasBecomeActive = true
+        backgroundedAt = nil
+        if play { openingRiseRequestedAt = Date() }
+    }
+
+    /// Call when the scene enters the background (starts the 30 min clock).
+    func sceneDidEnterBackground() {
+        backgroundedAt = Date()
+    }
+
+    /// The drop played (or skipped) the requested rise.
+    func consumeOpeningRise() {
+        openingRiseRequestedAt = nil
+    }
+
+    /// True once per calendar day, the first time today's water reaches the goal; remembers the day.
+    func claimGoalCelebration() -> Bool {
+        let date = now()
+        guard WaterDropMotion.shouldCelebrate(fraction: summary.water.fraction, lastCelebratedDay: lastCelebratedDay,
+                                              now: date, calendar: calendar) else { return false }
+        lastCelebratedDay = date
+        celebrationDefaults?.set(date, forKey: Self.lastCelebratedDayKey)
+        return true
+    }
 
     // MARK: Loading
 
@@ -230,6 +279,7 @@ final class AppModel {
         do {
             let (entry, _) = try await waterService.log(amountML: amountML, at: now())
             reload()
+            fuelyLogCount += 1
             reloadWidgets()
             await rescheduleReminders()
             return entry

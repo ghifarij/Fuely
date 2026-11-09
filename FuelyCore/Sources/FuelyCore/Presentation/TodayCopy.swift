@@ -43,15 +43,11 @@ public enum TodayCopy {
         }
     }
 
-    /// "Includes 300 ml from other apps", or nil when there is none (DECISIONS W4).
-    public static func otherAppsNote(_ summary: TodaySummary) -> String? {
-        summary.externalWaterML > 0 ? "Includes \(FuelyFormat.water(summary.externalWaterML)) from other apps" : nil
-    }
-
-    /// VoiceOver: "Water, 1.2 liters of 2.4 liters, 50 percent, on track."
+    /// VoiceOver for the Today water drop and total: "Water, 1.2 liters of 2.4 liters, 50 percent".
+    /// Says only what the card shows (DECISIONS T4, T4d); the pace lives in the quick-log sheet.
     public static func waterAccessibility(_ water: WaterProgress) -> String {
         "Water, \(FuelyFormat.waterSpoken(water.totalML)) of \(FuelyFormat.waterSpoken(water.goalML)), "
-            + "\(FuelyFormat.percentValue(water.fraction)) percent, \(paceText(water).lowercased())"
+            + "\(FuelyFormat.percentValue(water.fraction)) percent"
     }
 
     // MARK: Sleep

@@ -26,8 +26,12 @@ struct TodayView: View {
                         .foregroundStyle(FuelyColor.nudge)
                         .cardRow()
                 }
-                WaterCard(summary: summary) { model.isQuickLogPresented = true }
-                    .cardRow()
+                WaterCard(summary: summary, riseRequestedAt: model.openingRiseRequestedAt,
+                          fuelyLogCount: model.fuelyLogCount, onRiseConsumed: model.consumeOpeningRise,
+                          claimCelebration: model.claimGoalCelebration) {
+                    model.isQuickLogPresented = true
+                }
+                .cardRow()
                 goalCards(summary)
                     .cardRow()
             }
