@@ -20,10 +20,5 @@
       "Bash(git push:*)",
       "Bash(git * push:*)"
     ]
-  },
-  "attribution": {
-    "commit": "",
-    "pr": "",
-    "sessionUrl": false
   }
 }
