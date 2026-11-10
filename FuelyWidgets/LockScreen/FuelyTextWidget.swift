@@ -26,6 +26,7 @@ struct FuelyTextView: View {
             Text(WidgetCopy.inlineCompact(entry.summary))
         }
         .accessibilityLabel(WidgetCopy.accessibility(entry.summary))
+        .widgetSnaps(entry: entry)
         .widgetURL(FuelyDeepLink.today.url)
         .containerBackground(for: .widget) {}
     }

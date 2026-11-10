@@ -64,6 +64,7 @@ struct WidgetRing<Content: View>: View {
             if overflow > 0 {
                 arc(to: overflow)
                     .shadow(color: .black.opacity(isFullColor ? 0.3 : 0), radius: lineWidth / 3)
+                    .widgetSnaps()
             }
             content
         }
@@ -114,6 +115,23 @@ struct AccessoryAddGlyph: View {
 }
 
 extension View {
+    /// DECISIONS G8: nothing in a Fuely widget animates; every change between timeline entries
+    /// snaps. WidgetKit animates entry changes by default (blurred content transitions on text,
+    /// images and SF Symbols, fades when views are added or removed, interpolated shapes); Apple's
+    /// opt-out is `.identity` transitions and a `nil` animation. Apply to each widget's root view
+    /// (the content transition is inherited) and to every subtree that appears or disappears.
+    func widgetSnaps() -> some View {
+        contentTransition(.identity)
+            .transition(.identity)
+    }
+
+    /// `widgetSnaps()` for a widget's root view, also cancelling the implicit animation of the
+    /// entry change (ring arcs, layout).
+    func widgetSnaps(entry: FuelyEntry) -> some View {
+        widgetSnaps()
+            .animation(nil, value: entry.date)
+    }
+
     /// Content color that follows the rendering mode: the brand tint in full color, primary otherwise.
     func widgetTint(_ color: Color, _ mode: WidgetRenderingMode) -> some View {
         foregroundStyle(mode == .fullColor ? color : Color.primary)

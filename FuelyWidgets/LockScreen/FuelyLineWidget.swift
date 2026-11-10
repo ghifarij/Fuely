@@ -26,11 +26,14 @@ struct FuelyLineView: View {
         Group {
             if let draft = entry.draft {
                 AccessoryDraftPicker(draft: draft)
+                    .widgetSnaps()
             } else {
                 idle
+                    .widgetSnaps()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .widgetSnaps(entry: entry)
         .widgetURL(FuelyDeepLink.quickLog.url)
         .containerBackground(for: .widget) {}
     }

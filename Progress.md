@@ -72,6 +72,9 @@ Status legend: ⬜ todo · 🟡 in progress · ✅ done · ⛔ blocked
 ## Phase 9 — Today layout (T5, T5a)
 - ✅ Remove date, one recent drink + Show All under the water card, drop fits on the 4.7" SE (2026-11-10) — Today order: motivational line → water card → "Today's drinks (i) … Show All ›" → one row → Sleep/Workouts. Row choice + Show All rule in `TodayDrinkRow` (FuelyCore, tested); Show All pushes today's `DayDetailView` (`navigationDestination(isPresented:)` on Today), back returns. Drop size in `TodayLayout` (tested): whole-screen height ≤ 700 pt (SE 667, Display Zoom 693) → 140 pt (scales, cap 176), else 176 (scales, cap 220). Title row is text-height with 44 pt tap areas overhanging; header stacks at AX sizes. Checked iPhone 17 (iOS 26.5) + SE 3rd gen (iOS 18.3 and 26.5) light/dark × none/one/several/other-apps, AX-XL, Show All: header + row above the fold on the SE. 387 test cases pass, no warnings
 
+## Phase 10 — Widget motion (G8)
+- ✅ Remove all widget animation (numeric roll, invalidatable dimming, transitions) (2026-11-10) — numeric roll and every `invalidatableContent()` removed; `widgetSnaps()` (`.contentTransition(.identity)` + `.transition(.identity)`, Apple's opt-out) on every widget root and on each idle/picker branch and conditional piece, plus `.animation(nil, value: entry.date)` at the roots. Layout, intents, W6b flow and timelines unchanged; idle + picker renders checked (scratch gallery). 387 test cases pass, no warnings
+
 ## Phase 4 wrap-up
 - ✅ On-device checklist passed on the test iPhone (2026-11-09, user): widgets added + layouts (lock/home, dark/tinted), widget (+) picker ✓/✕ + Circle cycle, app ↔ widget totals (App Group store OK), Health source = Fuely, reminders (water/workout/toggle off), past days locked, sleep scores match Apple. Shortcuts "Log Water" not tested.
 
