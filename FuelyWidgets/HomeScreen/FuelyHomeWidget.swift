@@ -26,13 +26,14 @@ struct FuelyHomeView: View {
     var body: some View {
         Group {
             switch (family, entry.draft) {
-            case (.systemMedium, let draft?): MediumDraftView(summary: entry.summary, draft: draft)
-            case (.systemMedium, nil): MediumHomeView(entry: entry)
-            case (_, let draft?): SmallDraftView(draft: draft)
-            case (_, nil): SmallHomeView(entry: entry)
+            case (.systemMedium, let draft?): MediumDraftView(summary: entry.summary, draft: draft).widgetSnaps()
+            case (.systemMedium, nil): MediumHomeView(entry: entry).widgetSnaps()
+            case (_, let draft?): SmallDraftView(draft: draft).widgetSnaps()
+            case (_, nil): SmallHomeView(entry: entry).widgetSnaps()
             }
         }
         .fontDesign(.rounded)
+        .widgetSnaps(entry: entry)
         .widgetURL(FuelyDeepLink.today.url)
         .containerBackground(for: .widget) { WidgetColor.background }
     }

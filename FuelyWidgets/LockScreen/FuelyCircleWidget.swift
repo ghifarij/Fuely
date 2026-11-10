@@ -26,14 +26,18 @@ struct FuelyCircleView: View {
         Group {
             if entry.metric == .water, let draft = entry.draft {
                 CircleDraftPicker(draft: draft)
+                    .widgetSnaps()
             } else if entry.metric == .water {
                 AddWaterButton { ring }
+                    .widgetSnaps()
             } else {
                 ring
                     .accessibilityElement(children: .ignore)
                     .accessibilityLabel(WidgetCopy.accessibility(entry.metric, in: entry.summary))
+                    .widgetSnaps()
             }
         }
+        .widgetSnaps(entry: entry)
         .widgetURL(FuelyDeepLink.today.url)
         .containerBackground(for: .widget) { AccessoryWidgetBackground() }
     }
@@ -44,6 +48,7 @@ struct FuelyCircleView: View {
                 if entry.metric != .water {
                     Image(systemName: entry.metric.symbol)
                         .font(.system(size: 11, weight: .semibold))
+                        .widgetSnaps()
                 }
                 Text(WidgetCopy.value(entry.metric, in: entry.summary))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
@@ -53,6 +58,7 @@ struct FuelyCircleView: View {
                     Image(systemName: "plus")
                         .font(.system(size: 11, weight: .heavy))
                         .widgetAccentable()
+                        .widgetSnaps()
                 }
             }
             .padding(.horizontal, 6)

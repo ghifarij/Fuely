@@ -129,7 +129,8 @@ struct HomeCommitButton: View {
     }
 }
 
-/// "250" big with "ml" small, the picked amount (dims while an intent is running).
+/// "250" big with "ml" small, the picked amount. Changes snap (G8): no numeric roll, no dimming
+/// while an intent runs.
 struct HomeDraftAmount: View {
     var draft: WaterDraft
     var font: Font.TextStyle = .title2
@@ -144,14 +145,12 @@ struct HomeDraftAmount: View {
                 .fontWeight(.bold)
                 .monospacedDigit()
                 .foregroundStyle(mode == .fullColor ? WidgetColor.ocean : .primary)
-                .contentTransition(.numericText(value: Double(draft.amountML)))
             Text(WidgetCopy.draftUnit)
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(.secondary)
         }
         .lineLimit(1)
         .minimumScaleFactor(0.7)
-        .invalidatableContent()
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(WidgetCopy.draftAmountAccessibility(draft.amountML))
     }
@@ -232,7 +231,6 @@ struct AccessoryDraftPicker: View {
             .lineLimit(1)
             .padding(.horizontal, 2)
             .frame(minWidth: 36, maxWidth: .infinity)
-            .invalidatableContent()
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(WidgetCopy.draftAmountAccessibility(draft.amountML))
             glyph(.increase, "plus.circle.fill", size: 21)
@@ -277,7 +275,6 @@ struct CircleDraftPicker: View {
                 .padding(.top, 6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .contentShape(Rectangle())
-                .invalidatableContent()
             }
             .buttonStyle(.plain)
             .accessibilityLabel(WidgetCopy.cycleAccessibility(draft.amountML))

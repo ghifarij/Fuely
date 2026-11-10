@@ -31,9 +31,11 @@ struct FuelyApp: App {
             .onChange(of: scenePhase, initial: true) { _, phase in
                 switch phase {
                 case .active:
+                    model.sceneDidBecomeActive()
                     model.reload()
                     Task { await model.refresh() }
                 case .background:
+                    model.sceneDidEnterBackground()
                     BackgroundRefresh.schedule()
                 default:
                     break
