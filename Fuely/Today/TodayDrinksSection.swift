@@ -1,51 +1,109 @@
 import FuelyCore
 import SwiftUI
 
-/// Today's drinks: Fuely's entries (swipe to delete) and other apps' water as one read-only row
-/// (DECISIONS W7: other apps' samples can't be deleted by Fuely).
+/// Today's drinks under the water card (DECISIONS T5): the "Today's drinks" title with ⓘ and
+/// Show All, then one row: the newest Fuely drink (swipe to delete, W7), else other apps' water as
+/// a read-only row (Fuely can't delete those), else "No drinks logged yet today." Show All opens
+/// today's day detail with every drink.
 struct TodayDrinksSection: View {
     var entries: [WaterEntry]
     var externalML: Int
+    var onShowAll: () -> Void
     var onDelete: (WaterEntry) -> Void
 
+    private var row: TodayDrinkRow { TodayDrinkRow(entries: entries, externalML: externalML) }
+
     var body: some View {
+        let row = row
         Section {
-            if entries.isEmpty && externalML == 0 {
-                Text("No drinks logged yet today.")
-                    .font(FuelyFont.detail)
-                    .foregroundStyle(.secondary)
-                    .listRowBackground(rowBackground)
-            }
-            ForEach(entries) { entry in
+            TodayDrinksHeader(showsInfo: !entries.isEmpty, showsAll: row.showsAll, onShowAll: onShowAll)
+                .drinksRow(top: FuelySpacing.m, bottom: 0, minHeight: 0)
+            switch row {
+            case .fuely(let entry):
                 DrinkRow(amountML: entry.amountML, title: FuelyFormat.water(entry.amountML),
                          subtitle: nil, date: entry.date)
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         Button("Delete", systemImage: "trash", role: .destructive) { onDelete(entry) }
                     }
                     .accessibilityAction(named: "Delete") { onDelete(entry) }
-                    .listRowBackground(rowBackground)
+                    .drinksRow()
+            case .otherApps(let ml):
+                DrinkRow(amountML: ml, title: FuelyFormat.water(ml), subtitle: "Other apps · read-only", date: nil)
+                    .drinksRow()
+            case .none:
+                Text("No drinks logged yet today.")
+                    .font(FuelyFont.detail)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .drinksRow()
             }
-            if externalML > 0 {
-                DrinkRow(amountML: externalML, title: FuelyFormat.water(externalML),
-                         subtitle: "Other apps · read-only", date: nil)
-                    .listRowBackground(rowBackground)
-            }
-        } header: {
-            HStack(spacing: FuelySpacing.xs) {
+        }
+    }
+}
+
+/// "Today's drinks ⓘ" on the left, "Show All ›" on the right. Stacks at accessibility sizes so
+/// nothing truncates.
+private struct TodayDrinksHeader: View {
+    var showsInfo: Bool
+    var showsAll: Bool
+    var onShowAll: () -> Void
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    /// The buttons keep 44 pt tap areas that overhang the text-height title row; at accessibility
+    /// sizes the text is taller than that anyway, so nothing overhangs.
+    private var tapAreaOverhang: CGFloat { dynamicTypeSize.isAccessibilitySize ? 0 : -FuelySpacing.s }
+
+    var body: some View {
+        let layout = dynamicTypeSize.isAccessibilitySize
+            ? AnyLayout(VStackLayout(alignment: .leading, spacing: 0))
+            : AnyLayout(HStackLayout(spacing: FuelySpacing.xs))
+        layout {
+            HStack(spacing: FuelySpacing.xxs) {
                 Text("Today's drinks")
                     .font(FuelyFont.cardTitle)
                     .foregroundStyle(.primary)
-                if !entries.isEmpty {
+                    .fixedSize(horizontal: false, vertical: true)
+                    .accessibilityAddTraits(.isHeader)
+                if showsInfo {
+                    // Keeps its 44 pt tap area but lets the title row stay text-height, so the
+                    // title sits close to its row.
                     DrinksInfoButton()
+                        .padding(.vertical, tapAreaOverhang)
+                        .padding(.leading, dynamicTypeSize.isAccessibilitySize ? 0 : -FuelySpacing.xs)
                 }
             }
-            .textCase(nil)
-            .padding(.top, FuelySpacing.s)
+            if !dynamicTypeSize.isAccessibilitySize { Spacer(minLength: 0) }
+            if showsAll {
+                Button(action: onShowAll) {
+                    HStack(spacing: FuelySpacing.xxs) {
+                        Text("Show All")
+                        Image(systemName: "chevron.right")
+                            .font(FuelyFont.detail.weight(.semibold))
+                            .imageScale(.small)
+                    }
+                    .font(FuelyFont.body)
+                    .foregroundStyle(FuelyColor.ocean)
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.borderless)
+                .padding(.vertical, tapAreaOverhang)
+                .accessibilityLabel("Show all of today's drinks")
+            }
         }
     }
+}
 
-    /// Rows sit straight on the screen background; separators keep them apart.
-    private var rowBackground: some View { Color.clear }
+private extension View {
+    /// A drinks row straight on the screen background, aligned with the cards' content.
+    func drinksRow(top: CGFloat = FuelySpacing.xxs, bottom: CGFloat = FuelySpacing.xxs,
+                   minHeight: CGFloat = 44) -> some View {
+        frame(minHeight: minHeight)
+            .listRowBackground(Color.clear)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: top, leading: FuelySpacing.gutter + FuelySpacing.xxs,
+                                      bottom: bottom, trailing: FuelySpacing.gutter + FuelySpacing.xxs))
+    }
 }
 
 /// The ⓘ beside a drinks section title (Today and day detail): explains swipe-to-delete in a

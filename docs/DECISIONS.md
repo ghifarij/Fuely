@@ -83,6 +83,8 @@ Fuely = "fuel daily". A personal iOS app combining water intake, sleep score and
 | T4e | *Clarification (2026-11-09):* the splash and light haptic play only for drinks logged **in Fuely** (Today sheet). Water from other apps arriving with a Health refresh raises the level quietly (smooth rise, no splash, no haptic). |
 | T4f | *Low Power Mode, revises T4b (2026-11-09), following Apple's energy guidance (stop continuous and decorative motion, keep short feedback the user triggered):* idle waves stop (still frame), no opening rise, no bubbles/splash particles, no sparkle; a drink logged in Fuely still gets a short level change (≤ 0.4 s ease, no spring) and the haptics. Reduce Motion: as T4b (no motion), haptics kept. |
 | T4g | *Clarification (2026-11-09):* the ≥ 30 min opening rise plays only if Today is on screen when the app becomes active; returning from Week later never plays it. |
+| T5 | **Today layout** (2026-11-10): the date line is removed (the "Today" title and the T2 motivational line stay). Order: water drop card → "Today's drinks (i)" with **Show All ›** on the right → **one** drink row → Sleep / Workouts. The row is the newest Fuely entry (swipe-to-delete kept); with no Fuely entry but other apps' water, the "Other apps · read-only" row; with nothing, "No drinks logged yet today." Show All appears whenever there is at least one drink (Fuely or other apps), even just one, and pushes today's existing day detail. |
+| T5a | The drinks title and the one row must be visible without scrolling on every supported iPhone (incl. the 4.7" SE): the drop shrinks on short screens (~140 pt) and keeps its size on larger ones; accessibility sizes still never truncate. |
 
 ## 6. Widgets (user picks; like Calendar's widget gallery)
 
@@ -95,6 +97,7 @@ Fuely = "fuel daily". A personal iOS app combining water intake, sleep score and
 | G5 | **Home Screen**: one `systemSmall` and one `systemMedium` widget with rings + (+). |
 | G6 | Widget buttons work only when the phone is unlocked (iOS limitation; user accepted). |
 | G7 | Must render correctly in full-color, vibrant (lock screen) and accented/tinted modes (`widgetRenderingMode`, `widgetAccentedRenderingMode`). |
+| G8 | **No animation in widgets** (2026-11-10), lock screen and home screen: no numeric roll, no `invalidatableContent` dimming, no crossfade/transition between states; every change snaps. Goal: logging from a widget as light as possible. W6b picker flow unchanged. |
 
 ## 7. Reminders (local notifications)
 
@@ -157,3 +160,4 @@ Fuely = "fuel daily". A personal iOS app combining water intake, sleep score and
 - 2026-11-09 — Debug-only sleep calibration tools removed; S4/S8/S8a reworded generically (rules unchanged).
 - 2026-11-09 — T4–T4d added (animated water drop card on Today, haptics, pace badge moved to the quick-log sheet only) from a grilling session with the user.
 - 2026-11-09 — T4e (splash/haptic only for Fuely logs), T4f (Low Power Mode per Apple energy guidance; revises T4b), T4g (opening rise only when Today is on screen) — user answers after the prototype review; T4g decided by Claude at the user's request.
+- 2026-11-10 — T5, T5a (Today: date removed, one recent drink + Show All under the water card, drop shrinks on short screens) and G8 (no widget animation) from a grilling session with the user.

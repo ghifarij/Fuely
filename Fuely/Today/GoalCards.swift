@@ -12,13 +12,18 @@ struct WaterCard: View {
     var onRiseConsumed: () -> Void = {}
     /// `AppModel.claimGoalCelebration` (T4c).
     var claimCelebration: () -> Bool = { false }
+    /// The whole screen's height in points; short screens get a smaller drop (T5a). 0 = unknown.
+    var screenHeight: Double = 0
     var onLog: () -> Void
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
-    /// Grows with Dynamic Type, capped so the drop never crowds the text at accessibility sizes (T4d).
-    @ScaledMetric(relativeTo: .largeTitle) private var scaledDropHeight: CGFloat = 176
+    /// Grows with Dynamic Type, capped so the drop never crowds the text at accessibility sizes (T4d);
+    /// smaller on short screens (T5a, `TodayLayout`).
+    @ScaledMetric(relativeTo: .largeTitle) private var scaledDropHeight = TodayLayout.regularDropHeight
 
     private var water: WaterProgress { summary.water }
-    private var dropHeight: CGFloat { min(scaledDropHeight, 220) }
+    private var dropHeight: CGFloat {
+        TodayLayout.dropHeight(scaledHeight: scaledDropHeight, screenHeight: screenHeight)
+    }
 
     var body: some View {
         VStack(spacing: FuelySpacing.m) {

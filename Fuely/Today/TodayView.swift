@@ -1,18 +1,49 @@
 import FuelyCore
 import SwiftUI
 
-/// The Today screen (DECISIONS T1, T2): water, sleep and workouts, a motivational line,
-/// a sync hint when Health access is off, and today's drinks with swipe to delete (W7).
+/// The Today screen (DECISIONS T1, T2, T5): a motivational line, a sync hint when Health access
+/// is off, the water card, today's newest drink (swipe to delete, W7) with Show All, then sleep
+/// and workouts.
 struct TodayView: View {
     @Environment(AppModel.self) private var model
     @Environment(\.dynamicTypeSize) private var dynamicTypeSize
 
+    /// Pushes today's day detail with every drink (DECISIONS T5).
+    @State private var isShowingAllDrinks = false
+
     var body: some View {
-        @Bindable var model = model
+        // The whole screen's height (constant while the large title collapses) sizes the drop (T5a).
+        GeometryReader { proxy in
+            list(screenHeight: Double(proxy.size.height + proxy.safeAreaInsets.top + proxy.safeAreaInsets.bottom))
+        }
+        .fuelyScreenBackground()
+        .navigationTitle("Today")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: AppRoute.week) {
+                    Label("Week", systemImage: "chart.bar.xaxis")
+                }
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink(value: AppRoute.settings) {
+                    Label("Settings", systemImage: "gearshape")
+                }
+            }
+        }
+        .navigationDestination(isPresented: $isShowingAllDrinks) {
+            DayDetailView(date: model.currentDate)
+        }
+        .refreshable { await model.refresh() }
+        // Pace moves with the clock (DECISIONS W8): re-derive each minute, no HealthKit reads.
+        .task { await model.runMinuteTicks() }
+    }
+
+    /// Order (T5): header → water card → today's drinks (one row) → sleep and workouts.
+    private func list(screenHeight: Double) -> some View {
         let summary = model.summary
-        List {
+        return List {
             Section {
-                TodayHeader(date: summary.date, headline: TodayCopy.headline(for: summary))
+                TodayHeader(headline: TodayCopy.headline(for: summary))
                     .cardRow()
                 if let hint = model.syncHint {
                     SyncHintBanner(hint: hint, issue: summary.syncIssue ?? model.refreshIssue) {
@@ -28,36 +59,24 @@ struct TodayView: View {
                 }
                 WaterCard(summary: summary, riseRequestedAt: model.openingRiseRequestedAt,
                           fuelyLogCount: model.fuelyLogCount, onRiseConsumed: model.consumeOpeningRise,
-                          claimCelebration: model.claimGoalCelebration) {
+                          claimCelebration: model.claimGoalCelebration, screenHeight: screenHeight) {
                     model.isQuickLogPresented = true
                 }
                 .cardRow()
+            }
+            TodayDrinksSection(entries: model.todayEntries, externalML: summary.externalWaterML,
+                               onShowAll: { isShowingAllDrinks = true }) { entry in
+                Task { await model.delete(entry) }
+            }
+            Section {
                 goalCards(summary)
                     .cardRow()
-            }
-            TodayDrinksSection(entries: model.todayEntries, externalML: summary.externalWaterML) { entry in
-                Task { await model.delete(entry) }
             }
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
-        .fuelyScreenBackground()
-        .navigationTitle("Today")
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(value: AppRoute.week) {
-                    Label("Week", systemImage: "chart.bar.xaxis")
-                }
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink(value: AppRoute.settings) {
-                    Label("Settings", systemImage: "gearshape")
-                }
-            }
-        }
-        .refreshable { await model.refresh() }
-        // Pace moves with the clock (DECISIONS W8): re-derive each minute, no HealthKit reads.
-        .task { await model.runMinuteTicks() }
+        // Rows set their own heights; the drinks title row is text-height (T5a).
+        .environment(\.defaultMinListRowHeight, 0)
     }
 
     /// Sleep and workouts side by side; stacked at accessibility text sizes.
@@ -84,24 +103,16 @@ private extension View {
     }
 }
 
-/// Date and the motivational line (DECISIONS T2).
+/// The motivational line under the "Today" title (DECISIONS T2; no date line, T5).
 struct TodayHeader: View {
-    var date: Date
     var headline: String
 
     var body: some View {
-        VStack(alignment: .leading, spacing: FuelySpacing.xxs) {
-            Text(date, format: .dateTime.weekday(.wide).day().month(.wide).locale(DisplayLocale.english()))
-                .font(FuelyFont.caption)
-                .textCase(.uppercase)
-                .foregroundStyle(.secondary)
-            Text(headline)
-                .font(.system(.title3, design: .rounded, weight: .semibold))
-                .foregroundStyle(FuelyColor.ocean)
-                .fixedSize(horizontal: false, vertical: true)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .accessibilityElement(children: .combine)
+        Text(headline)
+            .font(.system(.title3, design: .rounded, weight: .semibold))
+            .foregroundStyle(FuelyColor.ocean)
+            .fixedSize(horizontal: false, vertical: true)
+            .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
