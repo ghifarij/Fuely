@@ -311,6 +311,16 @@ import Testing
         #expect(HistoryCopy.weekdayInitial(days[0].date, calendar: cal, locale: us) == "M")
     }
 
+    /// The day detail titles itself from the date it opens with, before its data loads, so the
+    /// title is there on the first frame.
+    @Test func dayTitlesFromDate() {
+        #expect(HistoryCopy.dayTitle(cal.at(2026, 11, 4, 8), now: now, calendar: cal, locale: us) == "Today")
+        #expect(HistoryCopy.dayTitle(cal.at(2026, 11, 3, 23, 59), now: now, calendar: cal, locale: us) == "Yesterday")
+        #expect(HistoryCopy.dayTitle(cal.at(2026, 11, 2), now: now, calendar: cal, locale: us) == "Monday")
+        // A day in a previous week.
+        #expect(HistoryCopy.dayTitle(cal.at(2026, 10, 29, 12), now: now, calendar: cal, locale: us) == "Thursday")
+    }
+
     @Test func dayDatesFollowRegion() {
         let days = week(now).days
         #expect(HistoryCopy.longDate(days[0].date, calendar: cal, locale: gb) == "Monday 2 November")

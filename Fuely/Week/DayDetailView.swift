@@ -42,7 +42,8 @@ struct DayDetailView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .fuelyScreenBackground()
-        .navigationTitle(day.map { HistoryCopy.dayTitle($0, now: now, calendar: calendar) } ?? "")
+        // From the date it opened with, not the loaded day: the title is there on the first frame.
+        .navigationTitle(HistoryCopy.dayTitle(date, now: now, calendar: calendar))
         .navigationBarTitleDisplayMode(.large)
         .task { await load() }
         .refreshable { await load() }

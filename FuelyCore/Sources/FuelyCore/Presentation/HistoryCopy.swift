@@ -33,10 +33,16 @@ public enum HistoryCopy {
     /// "Today", "Yesterday" or the weekday name ("Monday").
     public static func dayTitle(_ day: HistoryDay, now: Date, calendar: Calendar,
                                 locale: Locale = .autoupdatingCurrent) -> String {
-        if calendar.isDate(day.date, inSameDayAs: now) { return "Today" }
+        dayTitle(day.date, now: now, calendar: calendar, locale: locale)
+    }
+
+    /// Same title from a bare date, so the day detail can show it before its data loads.
+    public static func dayTitle(_ date: Date, now: Date, calendar: Calendar,
+                                locale: Locale = .autoupdatingCurrent) -> String {
+        if calendar.isDate(date, inSameDayAs: now) { return "Today" }
         if let yesterday = calendar.date(byAdding: .day, value: -1, to: now),
-           calendar.isDate(day.date, inSameDayAs: yesterday) { return "Yesterday" }
-        return day.date.formatted(style(calendar, locale).weekday(.wide))
+           calendar.isDate(date, inSameDayAs: yesterday) { return "Yesterday" }
+        return date.formatted(style(calendar, locale).weekday(.wide))
     }
 
     /// "Monday, November 3" (US), "Monday 3 November" (UK).
