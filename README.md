@@ -4,6 +4,23 @@ A personal iOS health app that shows three daily goals on one screen and on the 
 
 iPhone · iOS 18.0+ (Liquid Glass on iOS 26+) · in daily personal use
 
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/today.gif" width="200" alt="Today screen: the water drop fills to 69%"></td>
+    <td align="center"><img src="docs/screenshots/lock-screen.png" width="200" alt="Lock screen with the Fuely Rings widget"></td>
+    <td align="center"><img src="docs/screenshots/widget-picker.png" width="200" alt="Home screen widget with the water amount picker open"></td>
+    <td align="center"><img src="docs/screenshots/week.png" width="200" alt="Week view with daily water, sleep and workouts"></td>
+  </tr>
+  <tr>
+    <td align="center">Today</td>
+    <td align="center">Lock screen widget</td>
+    <td align="center">Log from the widget</td>
+    <td align="center">Week history</td>
+  </tr>
+</table>
+
+<sub>Screenshots use built-in sample data.</sub>
+
 ## Project
 
 - **Water:** a goal based on body weight, pace tracking across a drinking window, an animated water drop, and quick logging with undo.
