@@ -95,10 +95,6 @@ final class AppModel {
             let support = URL.applicationSupportDirectory.appending(path: "Fuely", directoryHint: .isDirectory)
             store = FuelyStore(directory: support)
         }
-        #if DEBUG && targetEnvironment(simulator)
-        // DEBUG, simulator only: `-recapDemo YES` runs on invented data in a throwaway store.
-        if let demo = RecapDemo.modelIfRequested() { return demo }
-        #endif
         let healthKit: (any HealthKitClient)? = WaterLogService.canUseHealthKit ? LiveHealthKitClient() : nil
         migrateOnboardingFlag(into: store)
         return AppModel(store: store, healthKit: healthKit, notifications: LiveNotificationCenter(),
