@@ -11,7 +11,8 @@ public enum FuelyStoreError: Error, Sendable, Equatable {
 /// App Intent (DECISIONS W4).
 ///
 /// Storage: one small JSON file per concern in `directory`
-/// (`settings.json`, `water-log.json`, `health-snapshot.json`, `reminders.json`, `water-draft.json`).
+/// (`settings.json`, `water-log.json`, `health-snapshot.json`, `reminders.json`, `water-draft.json`,
+/// `weekly-recaps.json`).
 ///
 /// Cross-process safety: every read takes a coordinated read and every change is a single
 /// read-modify-write inside a coordinated write (`NSFileCoordinator`, which serialises access
@@ -127,6 +128,18 @@ public final class FuelyStore: Sendable {
         try update(.waterDraft, default: WaterDraft?.none, body)
     }
 
+    // MARK: Weekly recaps (DECISIONS WR8)
+
+    public func weeklyRecaps() throws -> WeeklyRecapArchive {
+        try read(.weeklyRecaps, default: WeeklyRecapArchive())
+    }
+
+    /// Atomic read-modify-write of the saved recaps and the last shown week.
+    @discardableResult
+    public func updateWeeklyRecaps<R>(_ body: (inout WeeklyRecapArchive) throws -> R) throws -> R {
+        try update(.weeklyRecaps, default: WeeklyRecapArchive(), body)
+    }
+
     // MARK: Summary
 
     /// What the Today screen and the widgets show, from the stored state only (no HealthKit).
@@ -143,6 +156,7 @@ public final class FuelyStore: Sendable {
         case healthSnapshot = "health-snapshot.json"
         case reminders = "reminders.json"
         case waterDraft = "water-draft.json"
+        case weeklyRecaps = "weekly-recaps.json"
     }
 
     func url(for file: File) -> URL {

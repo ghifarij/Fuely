@@ -45,6 +45,11 @@ final class AppModel {
     private(set) var notificationPermission: NotificationPermission = .allowed
     @ObservationIgnored private var rescheduleTask: Task<Void, Never>?
 
+    /// The weekly recap on screen and what waits behind the quick-log sheet (DECISIONS WR7, WR9).
+    private var recapFlow = WeeklyRecapFlow()
+    /// An open of the app (launch, foreground) still has to check for a new weekly recap.
+    @ObservationIgnored private var needsRecapCheck = false
+
     /// Wall-clock time of the latest request for the Today drop's opening rise (DECISIONS T4a);
     /// nil once the drop played it. Only `WaterDropMotion` decides when to request it.
     /// Only set when Today's drop can pick it up within `WaterDropMotion.pendingRiseLifetime` (T4g).
@@ -90,6 +95,10 @@ final class AppModel {
             let support = URL.applicationSupportDirectory.appending(path: "Fuely", directoryHint: .isDirectory)
             store = FuelyStore(directory: support)
         }
+        #if DEBUG && targetEnvironment(simulator)
+        // DEBUG, simulator only: `-recapDemo YES` runs on invented data in a throwaway store.
+        if let demo = RecapDemo.modelIfRequested() { return demo }
+        #endif
         let healthKit: (any HealthKitClient)? = WaterLogService.canUseHealthKit ? LiveHealthKitClient() : nil
         migrateOnboardingFlag(into: store)
         return AppModel(store: store, healthKit: healthKit, notifications: LiveNotificationCenter(),
@@ -113,9 +122,11 @@ final class AppModel {
     /// Show the first-launch onboarding (DECISIONS O1).
     var needsOnboarding: Bool { hasLoadedSettings && !settings.hasCompletedOnboarding }
 
-    /// Marks onboarding as done (the flag lives in `FuelySettings`).
+    /// Marks onboarding as done and remembers when (the flag and the date live in `FuelySettings`;
+    /// weekly recaps start from that date, WR10).
     func completeOnboarding() {
-        updateSettings { $0.hasCompletedOnboarding = true }
+        let date = now()
+        updateSettings { $0.completeOnboarding(at: date) }
     }
 
     /// Keeps the pace and the day current while the Today screen stays open: re-derives the summary
@@ -188,29 +199,40 @@ final class AppModel {
         }
     }
 
+    /// A launch or a return to the foreground: the Health refresh, then the weekly recap check (WR7).
+    func refreshOnOpen() async {
+        needsRecapCheck = true
+        await refresh()
+    }
+
     /// Pushes queued water to HealthKit and reads sleep, workouts and other apps' water
     /// (HealthSync.refresh). Call on launch and whenever the scene becomes active.
+    ///
+    /// One at a time. The recap check of an open runs at the end of the refresh that is in flight,
+    /// inside the same guard, so it never runs twice at once.
     func refresh() async {
         guard !isRefreshing else { return }
-        guard let healthKit else {
-            reload()
-            reloadWidgets()
-            await rescheduleReminders()
-            return
-        }
         isRefreshing = true
         defer { isRefreshing = false }
-        do {
-            try await HealthSync(store: store, healthKit: healthKit, calendar: calendar).refresh(now: now())
-            refreshIssue = nil
-        } catch {
-            refreshIssue = HealthSyncIssue(error)
-            Self.log.notice("HealthKit refresh failed: \(error.localizedDescription)")
+        if let healthKit {
+            do {
+                try await HealthSync(store: store, healthKit: healthKit, calendar: calendar).refresh(now: now())
+                refreshIssue = nil
+            } catch {
+                refreshIssue = HealthSyncIssue(error)
+                Self.log.notice("HealthKit refresh failed: \(error.localizedDescription)")
+            }
+            reload()
+            updateHealthAccess()
+        } else {
+            reload()
         }
-        reload()
-        updateHealthAccess()
         reloadWidgets()
         await rescheduleReminders()
+        while needsRecapCheck {
+            needsRecapCheck = false
+            await checkWeeklyRecap()
+        }
     }
 
     /// Asks for Health access (onboarding and the "Health access off" hint), then refreshes.
@@ -311,6 +333,74 @@ final class AppModel {
         await rescheduleReminders()
     }
 
+    // MARK: Weekly recap (DECISIONS §11)
+
+    /// The recap to show full screen over everything; nil = none.
+    var presentedRecap: WeeklyRecap? { recapFlow.presented }
+
+    private var recapService: WeeklyRecapService {
+        WeeklyRecapService(store: store,
+                           loader: WeekHistoryLoader(store: store, healthKit: healthKit, calendar: calendar),
+                           calendar: calendar)
+    }
+
+    private var recapContext: WeeklyRecapFlow.Context {
+        WeeklyRecapFlow.Context(isOnboarded: hasLoadedSettings && settings.hasCompletedOnboarding,
+                                isQuickLogOpen: isQuickLogPresented)
+    }
+
+    /// Makes the recaps of finished weeks and pops up the newest one if it was never shown (WR7,
+    /// WR8). Only from `refresh`, after the Health refresh of an open. Failures stay quiet.
+    private func checkWeeklyRecap() async {
+        guard recapContext.isOnboarded else { return }
+        do {
+            let recap = try await recapService.refresh(now: now())
+            recapFlow.offer(recap, in: recapContext)
+        } catch {
+            Self.log.notice("Weekly recap check failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// The saved recap of the week containing `date`, for the Week view's button (WR9).
+    func savedRecap(forWeekContaining date: Date) -> WeeklyRecap? {
+        do {
+            return try recapService.recap(forWeekContaining: date)
+        } catch {
+            Self.log.notice("Weekly recap read failed: \(error.localizedDescription)")
+            return nil
+        }
+    }
+
+    /// The Week view's "Weekly recap" button: the same full screen, without counting as the pop-up.
+    func reopenRecap(_ recap: WeeklyRecap) {
+        recapFlow.reopen(recap)
+    }
+
+    /// The recap is on screen: the pop-up is recorded as shown, so it never pops up again (WR7).
+    func recapDidAppear() {
+        guard let recap = recapFlow.didAppear() else { return }
+        do {
+            try recapService.markShown(recap)
+        } catch {
+            Self.log.notice("Weekly recap mark failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// "Start this week".
+    func closeRecap() {
+        recapFlow.close()
+    }
+
+    /// The recap has left the screen: a quick-log request that waited for it opens now.
+    func recapDidDismiss() {
+        if recapFlow.recapDidDismiss(in: recapContext) { isQuickLogPresented = true }
+    }
+
+    /// The quick-log sheet has closed: a recap that waited for it pops up now (WR7).
+    func quickLogDidDismiss() {
+        recapFlow.quickLogDidDismiss(in: recapContext)
+    }
+
     // MARK: History
 
     /// The Monday–Sunday week containing `date` (DECISIONS T3, K2): HealthKit when it can be read,
@@ -355,7 +445,9 @@ final class AppModel {
 
     func handle(_ url: URL) {
         switch FuelyDeepLink(url: url) {
-        case .quickLog?: isQuickLogPresented = true
+        case .quickLog?:
+            // Never over the recap: there the sheet waits until "Start this week".
+            if recapFlow.requestQuickLog() { isQuickLogPresented = true }
         case .today?, nil: break
         }
     }

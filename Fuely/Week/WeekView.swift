@@ -12,6 +12,8 @@ struct WeekView: View {
     @State private var week: WeekHistory?
     @State private var issue: HealthSyncIssue?
     @State private var loadFailed = false
+    /// The saved recap of the week on screen (WR9); nil for this week and weeks without one.
+    @State private var recap: WeeklyRecap?
 
     /// How far back the week switcher goes.
     static let maxWeeksBack = 12
@@ -23,6 +25,9 @@ struct WeekView: View {
         ScrollView {
             VStack(spacing: FuelySpacing.s) {
                 weekSwitcher
+                if let recap {
+                    recapButton(recap)
+                }
                 if let week {
                     if let note = dataNote(week) {
                         Label(note, systemImage: "info.circle")
@@ -88,6 +93,24 @@ struct WeekView: View {
         .tint(FuelyColor.ocean)
     }
 
+    /// "Weekly recap" (WR9): reopens the week's saved recap on the same full screen.
+    private func recapButton(_ recap: WeeklyRecap) -> some View {
+        Button {
+            model.reopenRecap(recap)
+        } label: {
+            Label("Weekly recap", systemImage: "sparkles")
+                .font(FuelyFont.detail.weight(.semibold))
+                .multilineTextAlignment(.center)
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, FuelySpacing.xs)
+        }
+        .fuelySecondaryButton()
+        .buttonBorderShape(.capsule)
+        .tint(FuelyColor.ocean)
+        .padding(.bottom, FuelySpacing.xxs)
+        .accessibilityHint("Shows how this week went")
+    }
+
     @ViewBuilder
     private func summaryCards(_ week: WeekHistory) -> some View {
         // Side by side, the card titles break mid-word at accessibility sizes: stack them instead.
@@ -151,6 +174,7 @@ struct WeekView: View {
         loadFailed = false
         week = result.week
         issue = result.issue
+        recap = weekOffset < 0 ? model.savedRecap(forWeekContaining: date) : nil
     }
 }
 

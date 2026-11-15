@@ -116,6 +116,7 @@ struct FuelyStoreTests {
                                                     workouts: [WorkoutSample(start: .now, end: .now, duration: 0)]))
         try store.updateReminders { $0.recordWaterReminder(at: .now, calendar: cal) }
         try store.updateWaterDraft { $0 = WaterDraft(amountML: 300, startedAt: cal.at(2026, 11, 9, 9)) }
+        try store.updateWeeklyRecaps { $0.save(sampleRecap(week: RecapWeek(mondayYear: 2026, month: 11, day: 2))) }
         for file in FuelyStore.File.allCases {
             let url = store.url(for: file)
             var object = try #require(try JSONSerialization.jsonObject(with: Data(contentsOf: url)) as? [String: Any])
@@ -127,6 +128,7 @@ struct FuelyStoreTests {
         #expect(try store.healthSnapshot()?.sleepScore == 70)
         #expect(try store.reminders().waterRemindersSent(onDayOf: .now, calendar: cal) == 1)
         #expect(try store.waterDraft()?.amountML == 300)
+        #expect(try store.weeklyRecaps().recaps.map(\.week.description) == ["2026-11-02"])
     }
 
     @Test func filesCarryASchemaVersion() throws {
