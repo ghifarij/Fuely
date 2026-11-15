@@ -27,13 +27,13 @@ struct FuelyApp: App {
             .environment(model)
             .onOpenURL { model.handle($0) }
             // Covers launch (the scene becomes active) and every return to the foreground.
-            // `refresh` also reschedules the reminders (R5).
+            // The refresh also reschedules the reminders (R5); the weekly recap check follows it (WR7).
             .onChange(of: scenePhase, initial: true) { _, phase in
                 switch phase {
                 case .active:
                     model.sceneDidBecomeActive()
                     model.reload()
-                    Task { await model.refresh() }
+                    Task { await model.refreshOnOpen() }
                 case .background:
                     model.sceneDidEnterBackground()
                     BackgroundRefresh.schedule()

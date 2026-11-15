@@ -47,6 +47,9 @@ public struct FuelySettings: Codable, Sendable, Hashable {
     /// The first-launch onboarding (DECISIONS O1) was finished. Kept here, in the App Group, so
     /// there is one source of truth for every setting.
     public var hasCompletedOnboarding: Bool
+    /// When onboarding was finished: the start date for weekly recaps (DECISIONS WR10). nil before
+    /// that, and for installs that finished onboarding before this was saved.
+    public var onboardingCompletedAt: Date?
 
     public init(
         heightCM: Double? = nil,
@@ -58,7 +61,8 @@ public struct FuelySettings: Codable, Sendable, Hashable {
         workoutGoal: WorkoutGoal = .default,
         workoutReminderTime: TimeOfDay = TimeOfDay(hour: 8),
         sleepGoalScore: Int = 80,
-        hasCompletedOnboarding: Bool = false
+        hasCompletedOnboarding: Bool = false,
+        onboardingCompletedAt: Date? = nil
     ) {
         self.heightCM = heightCM
         self.weightKG = weightKG
@@ -70,13 +74,21 @@ public struct FuelySettings: Codable, Sendable, Hashable {
         self.workoutReminderTime = workoutReminderTime
         self.sleepGoalScore = sleepGoalScore
         self.hasCompletedOnboarding = hasCompletedOnboarding
+        self.onboardingCompletedAt = onboardingCompletedAt
+    }
+
+    /// Marks onboarding as finished and remembers when (WR10). A date already saved is kept.
+    public mutating func completeOnboarding(at date: Date) {
+        hasCompletedOnboarding = true
+        if onboardingCompletedAt == nil { onboardingCompletedAt = date }
     }
 
     public static let `default` = FuelySettings()
 
     private enum CodingKeys: String, CodingKey {
         case schemaVersion, heightCM, weightKG, waterGoalML, drinkingWindow, widgetAmountML,
-             remindersEnabled, workoutGoal, workoutReminderTime, sleepGoalScore, hasCompletedOnboarding
+             remindersEnabled, workoutGoal, workoutReminderTime, sleepGoalScore, hasCompletedOnboarding,
+             onboardingCompletedAt
     }
 
     /// Keys read only to migrate older files.
@@ -103,7 +115,8 @@ public struct FuelySettings: Codable, Sendable, Hashable {
             workoutReminderTime: try c.decodeIfPresent(TimeOfDay.self, forKey: .workoutReminderTime) ?? d.workoutReminderTime,
             sleepGoalScore: try c.decodeIfPresent(Int.self, forKey: .sleepGoalScore) ?? d.sleepGoalScore,
             hasCompletedOnboarding: try c.decodeIfPresent(Bool.self, forKey: .hasCompletedOnboarding)
-                ?? d.hasCompletedOnboarding
+                ?? d.hasCompletedOnboarding,
+            onboardingCompletedAt: try c.decodeIfPresent(Date.self, forKey: .onboardingCompletedAt)
         )
         schemaVersion = try c.decodeIfPresent(Int.self, forKey: .schemaVersion) ?? Self.currentSchemaVersion
     }
